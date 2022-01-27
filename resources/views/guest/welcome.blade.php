@@ -8,7 +8,7 @@
         <hr class="my-2">
         <p>View my show</p>
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Vai allo shop</a>
+            <a class="btn btn-primary btn-lg" href="{{ route('guest.index.posts') }}" role="button">Vai allo shop</a>
         </p>
     </div>
 </div>

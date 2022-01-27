@@ -18,8 +18,15 @@ Route::get('/', function () {
     return view('guest.welcome');
 })->name('home');
 
-Auth::routes();
+Route::resource('posts', 'Guest\PostController')->only([
+    'index', 'show'
+])->names([
+    'index'=> 'guest.index.posts',
+    'show'=> 'guest.show.post'
+]);
 
+
+Auth::routes();
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('auth')->group(function(){
 
