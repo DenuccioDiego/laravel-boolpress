@@ -6,7 +6,7 @@
      <div class="row">
           @foreach($posts as $post)
           <div class="col-6">
-               <a href="{{ route('guest.show.post', $post->id) }}">
+               <a href="{{ route('guest.show.post', $post->slug) }}">
                     {{$post->title}}
                </a>
           </div>

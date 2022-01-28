@@ -18,12 +18,15 @@ Route::get('/', function () {
     return view('guest.welcome');
 })->name('home');
 
-Route::resource('posts', 'Guest\PostController')->only([
+Route::resource('posts', 'Guest\PostController')->parameters([
+    'posts:id' => 'post:slug'
+])->only([
     'index', 'show'
 ])->names([
     'index'=> 'guest.index.posts',
     'show'=> 'guest.show.post'
 ]);
+
 
 Auth::routes();
 

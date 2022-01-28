@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Posts;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -15,7 +17,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::orderby('id', 'desc')->paginate(8);
+
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -25,7 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -36,7 +40,18 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $new_post = $request->validate([
+            'title' => 'required|max:100|unique:posts',
+            'image' => 'nullable|url|max:200',
+            'subtile' => 'nullable|max:200',
+            'description' => 'nullable|max:800',    
+        ]);
+
+        $new_post['slug'] = Str::slug($new_post['title']); 
+        
+        Post::create($new_post);
+
+        return redirect()->route('admin.posts.show', $new_post['slug']);
     }
 
     /**
@@ -47,7 +62,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        
+        return view('admin.posts.show', compact('post'));
     }
 
     /**
@@ -57,8 +73,8 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Post $post)
-    {
-        //
+    { 
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -70,7 +86,18 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $new_post = $request->validate([
+            'title' => ['required', 'max:100', Rule::unique('posts')->ignore($post->id)],
+            'image' => 'nullable|url|max:200',
+            'subtile' => 'nullable|max:200',
+            'description' => 'nullable|max:800',    
+        ]);
+
+        $new_post['slug'] = Str::slug($new_post['title']); 
+        
+        $post->update($new_post);
+
+        return redirect()->route('admin.posts.show', $post['slug']);
     }
 
     /**
@@ -81,6 +108,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->back();
     }
 }
