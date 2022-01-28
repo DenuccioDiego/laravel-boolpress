@@ -43,7 +43,7 @@ class PostController extends Controller
         $new_post = $request->validate([
             'title' => 'required|max:100|unique:posts',
             'image' => 'nullable|url|max:200',
-            'subtile' => 'nullable|max:200',
+            'sub_title' => 'nullable|max:200',
             'description' => 'nullable|max:800',    
         ]);
 
@@ -51,7 +51,7 @@ class PostController extends Controller
         
         Post::create($new_post);
 
-        return redirect()->route('admin.posts.show', $new_post['slug']);
+        return redirect()->route('admin.posts.show', $new_post['slug'])->with('message', "Hai creato il nuovo post: $new_post[title]");
     }
 
     /**
@@ -89,7 +89,7 @@ class PostController extends Controller
         $new_post = $request->validate([
             'title' => ['required', 'max:100', Rule::unique('posts')->ignore($post->id)],
             'image' => 'nullable|url|max:200',
-            'subtile' => 'nullable|max:200',
+            'sub_title' => 'nullable|max:200',
             'description' => 'nullable|max:800',    
         ]);
 
@@ -97,7 +97,7 @@ class PostController extends Controller
         
         $post->update($new_post);
 
-        return redirect()->route('admin.posts.show', $post['slug']);
+        return redirect()->route('admin.posts.show', $post['slug'])->with('message', "Hai modificato il post: $post[title]");
     }
 
     /**
@@ -110,6 +110,6 @@ class PostController extends Controller
     {
         $post->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('message', "Hai cancellato il post: $post[title]");
     }
 }

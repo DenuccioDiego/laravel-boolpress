@@ -2,6 +2,7 @@
 
 @section('content')
 
+@include('partials.messages')
      <div class="container">
           <span>
                Post numero {{$post->id}}

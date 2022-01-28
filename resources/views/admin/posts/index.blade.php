@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('partials.messages')
+
      <div class="row mt-3">
           <h1 class="col-9">Posts List</h1>
           <div class="col-3 text-end">
