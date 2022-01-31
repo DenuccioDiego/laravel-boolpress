@@ -21,8 +21,8 @@
 
           <div class="metadata">
                <span>
-                 
-                    Category: {{$post->category->name != null ? $post->category->name : 'No category'}}
+               
+                    Category: {{!empty($post->category->name) ? $post->category->name : 'no category'}}
                     
                </span>
           </div>
