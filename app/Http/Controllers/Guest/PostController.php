@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Guest;
 
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 
@@ -15,9 +16,11 @@ class PostController extends Controller
     public function index()
     {
         //ddd(Post::all());
+
+        $categories = Category::all();
         $posts = Post::orderBy('id', 'desc')->paginate(6);
 
-        return view('guest.posts.index', compact('posts'));
+        return view('guest.posts.index', compact('posts', 'categories'));
     }
 
     /**

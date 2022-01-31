@@ -70,6 +70,13 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.categories.index') }}">
+                                    <i class="fas fa-list-ul fa-lg fa-fw"></i>
+                                    Categories
+                                </a>
+                            </li>
+
                         </ul>
 
                     </div>

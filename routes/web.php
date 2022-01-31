@@ -28,12 +28,15 @@ Route::resource('posts', 'Guest\PostController')->parameters([
 ]);
 
 
+Route::get('categories/{category:slug}/posts/', 'Guest\CategoryController@posts')->name('guest.categories.posts');
+
 Auth::routes();
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('auth')->group(function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
 
+    Route::resource('/categories', 'Categories\CategoryController');
     Route::resource('/posts', 'Posts\PostController');
 });
 

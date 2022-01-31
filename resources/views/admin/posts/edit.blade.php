@@ -49,6 +49,20 @@
                @enderror
           </div>
 
+          <div class="mb-3">
+               <label for="category_id" class="form-label">Categories</label>
+               <select class="form-control @error('category_id') is_invalid @enderror" name="category_id" id="category_id">
+               <option value="" selected>Select a category</option>
+              
+               @foreach($categories as $category)
+               <option value="{{$category->id}}" {{$category->id == old('category', $post->category_id) ? 'selected' : ''}}>
+                    {{$category->name}}
+               </option>
+               @endforeach
+              
+               </select>
+          </div>
+
           <button class="btn btn-dark" type="submit" value="invia">INVIA</button>
      </form>
 

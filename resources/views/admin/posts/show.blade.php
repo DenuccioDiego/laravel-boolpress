@@ -19,6 +19,14 @@
                {{$post->description}}
           </p>
 
+          <div class="metadata">
+               <span>
+                 
+                    Category: {{$post->category->name != null ? $post->category->name : 'No category'}}
+                    
+               </span>
+          </div>
+
      </div>    
 
 @endsection

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Posts;
 
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -17,8 +19,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderby('id', 'desc')->paginate(8);
-
+        $posts = Auth::user()->posts()->orderby('id', 'desc')->paginate(5);
+        
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -29,7 +31,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -44,11 +47,13 @@ class PostController extends Controller
             'title' => 'required|max:100|unique:posts',
             'image' => 'nullable|url|max:200',
             'sub_title' => 'nullable|max:200',
-            'description' => 'nullable|max:800',    
+            'description' => 'nullable|max:800', 
+            'category_id' => 'nullable|exists:categories,id',
+            'user_id' => Auth::id(),   
         ]);
 
         $new_post['slug'] = Str::slug($new_post['title']); 
-        
+
         Post::create($new_post);
 
         return redirect()->route('admin.posts.show', $new_post['slug'])->with('message', "Hai creato il nuovo post: $new_post[title]");
@@ -62,8 +67,12 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        
-        return view('admin.posts.show', compact('post'));
+        if (Auth::id() === $post->user_id){
+            return view('admin.posts.show', compact('post'));
+        } else {
+            abort(403);
+        }
+
     }
 
     /**
@@ -74,7 +83,13 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     { 
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::all();
+        if (Auth::id() === $post->user_id){
+            return view('admin.posts.edit', compact('post','categories'));
+        } else {
+            abort(403);
+        }
+        
     }
 
     /**
@@ -86,18 +101,26 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $new_post = $request->validate([
-            'title' => ['required', 'max:100', Rule::unique('posts')->ignore($post->id)],
-            'image' => 'nullable|url|max:200',
-            'sub_title' => 'nullable|max:200',
-            'description' => 'nullable|max:800',    
-        ]);
+        if (Auth::id() === $post->user_id){
+            $new_post = $request->validate([
+                'title' => ['required', 'max:100', Rule::unique('posts')->ignore($post->id)],
+                'image' => 'nullable|url|max:200',
+                'sub_title' => 'nullable|max:200',
+                'description' => 'nullable|max:800',
+                'category_id' => 'nullable|exists:categories,id', 
+                'user_id' => Auth::id(),    
+            ]);
+    
+            $new_post['slug'] = Str::slug($new_post['title']); 
+            
+            $post->update($new_post);
+    
+            return redirect()->route('admin.posts.show', $post['slug'])->with('message', "Hai modificato il post: $post[title]");
 
-        $new_post['slug'] = Str::slug($new_post['title']); 
+        } else {
+            abort(403);
+        }
         
-        $post->update($new_post);
-
-        return redirect()->route('admin.posts.show', $post['slug'])->with('message', "Hai modificato il post: $post[title]");
     }
 
     /**
@@ -108,8 +131,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        if (Auth::id() === $post->user_id){
+            $post->delete();
 
-        return redirect()->back()->with('message', "Hai cancellato il post: $post[title]");
+            return redirect()->back()->with('message', "Hai cancellato il post: $post[title]");
+        } else {
+            abort(403);
+        }
+        
     }
 }
