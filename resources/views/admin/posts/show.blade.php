@@ -27,6 +27,15 @@
                </span>
           </div>
 
+          <div class="metadata">
+               <span>
+                    @forelse($post->tags as $tag)
+                    <span>{{$tag->name}}/</span> 
+                    @empty
+                    <span>No tags</span>
+                    @endforelse
+               </span>
+          </div>
      </div>    
 
 @endsection

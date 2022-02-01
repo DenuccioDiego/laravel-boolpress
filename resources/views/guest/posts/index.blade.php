@@ -22,6 +22,14 @@
                     @endforeach
                </ul>
           </div>
+
+          <div class="row col-2">
+               <ul class="list-group">
+                    @foreach($tags as $tag)
+                    <li class="list-group-item"><a href="{{ route('guest.tags.posts', $tag->slug) }}"> {{$tag->name}} </a></li>
+                    @endforeach
+               </ul>
+          </div>
      </div>
      
 
