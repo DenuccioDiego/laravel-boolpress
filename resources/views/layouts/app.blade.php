@@ -38,6 +38,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('guest.index.posts') }}">Posts</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/blogs">Blogs</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

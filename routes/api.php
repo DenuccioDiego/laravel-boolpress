@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
+use App\Http\Resources\PostResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('posts', function(){
+Route::get('postsApi', 'API\PostController@index');
 
-    $posts = Post::all();
-    return response()->json([
-        'response' => $posts
-    ]);
-    //oppure metodo veloce 
-    //return $posts;
-});
+Route::get('postsApi/{post}', 'API\PostController@show');
+

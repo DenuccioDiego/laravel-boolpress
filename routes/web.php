@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('guest.welcome');
 })->name('home');
 
+Route::get('/blogs', function(){
+    return view('guest.blogs.index');
+});
+
 Route::resource('posts', 'Guest\PostController')->parameters([
     'posts:id' => 'post:slug'
 ])->only([
