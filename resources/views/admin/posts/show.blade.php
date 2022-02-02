@@ -13,7 +13,7 @@
           <h5>
                {{$post->sub_title}}
           </h5>    
-          <img class="img-fluid" src="{{ $post->image }}" alt="">
+          <img class="img-fluid" src="{{ asset('storage/' . $post->image) }}" alt="">
           
           <p>
                {{$post->description}}

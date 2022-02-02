@@ -6,7 +6,7 @@
           {{$post->title}}
      </div>
 
-     <img src="{{$post->image}}" alt="">
+     <img src="{{ asset('storage/' . $post->image) }}" alt="">
 
      @if($post->category)
      <a href="{{ route('guest.categories.posts', $post->category->slug) }}"> {{$post->category->name}} </a>

@@ -7,7 +7,7 @@
           <div class="row col-10">
                @foreach($posts as $post)
                <div class="col-6">
-                    <img src="{{$post->image}}" alt="">
+                    <img src="{{ asset('storage/' . $post->image) }}" with="125" height="125" alt="">
                     <a href="{{ route('guest.show.post', $post->slug) }}">
                          {{$post->title}}
                     </a>

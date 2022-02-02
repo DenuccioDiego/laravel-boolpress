@@ -2,7 +2,7 @@
 
 @section('content')
 @include('partials.errors')
-<form class="pt-4" action="{{ route('admin.posts.store')}}" method="post">
+<form class="pt-4" action="{{ route('admin.posts.store')}}" method="post" enctype="multipart/form-data">
      @csrf
 
      <div class="mb-3">
@@ -16,8 +16,9 @@
 
      <div class="mb-3">
           <label for="image" class="form-label">Link Image</label>
-          <input value="{{old('image')}}" type="text" class="form-control" name="image" id="image" aria-describedby="helpId" placeholder="https://yourimage_here.jpg">
-          <small id="helpId" class="form-text text-muted">Link image</small>
+          <input type="file" class="form-control" name="image" id="image" 
+          aria-describedby="helpImage" placeholder="https://yourimage_here.jpg" accept=".jpg,.png">
+          <small id="helpImage" class="form-text text-muted">Link image</small>
           @error('image')
           <div class="alert alert-danger">{{ $message }}</div>
           @enderror

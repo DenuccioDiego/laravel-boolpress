@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -48,11 +49,18 @@ class PostController extends Controller
         //ddd($request);  
         $new_post = $request->validate([
             'title' => 'required|max:100|unique:posts',
-            'image' => 'nullable|url|max:200',
+            'image' => 'nullable|max:1000|image',
             'sub_title' => 'nullable|max:200',
             'description' => 'nullable|max:800',
             'category_id' => 'nullable|exists:categories,id',
         ]);
+
+        if ($request->file('image')){
+            $image_path = Storage::put('post_image', $request->file('image'));
+            $new_post['image'] = $image_path;
+        }
+        
+        //ddd($new_post);
 
         $new_post['slug'] = Str::slug($new_post['title']);
 
@@ -116,11 +124,17 @@ class PostController extends Controller
         if (Auth::id() === $post->user_id) {
             $new_post = $request->validate([
                 'title' => ['required', 'max:100', Rule::unique('posts')->ignore($post->id)],
-                'image' => 'nullable|url|max:200',
+                'image' => 'nullable|max:1000|image',
                 'sub_title' => 'nullable|max:200',
                 'description' => 'nullable|max:800',
                 'category_id' => 'nullable|exists:categories,id',
             ]);
+
+            if($request->file('image')){
+                Storage::delete($post->image);
+                $image_path = $request->file('image')->store('post_image');
+                $new_post['image'] = $image_path;
+            }
 
             $new_post['slug'] = Str::slug($new_post['title']);
 

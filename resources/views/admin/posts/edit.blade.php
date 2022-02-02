@@ -2,7 +2,7 @@
 
 @section('content')
 @include('partials.errors')
-<form class="pt-4" action="{{ route('admin.posts.update', $post->slug)}}" method="post">
+<form class="pt-4" action="{{ route('admin.posts.update', $post->slug)}}" method="post" enctype="multipart/form-data">
      @csrf
      @method('PUT')
 
@@ -16,10 +16,11 @@
      </div>
 
      <div class="mb-3 row">
-          <img class="col-2" width="125" src="{{$post->image}}" alt="image-post">
+          <img class="col-2" width="125" src="{{ asset('storage/' . $post->image) }}" alt="image-post">
           <div class="col-10">
                <label for="image" class="form-label">Link Image</label>
-               <input value="{{$post->image}}" type="text" class="form-control" name="image" id="image" aria-describedby="helpId" placeholder="https://yourimage_here.jpg">
+               <input type="file" class="form-control" name="image" id="image" accept=".jpeg,.png" 
+               aria-describedby="helpId" placeholder="https://yourimage_here.jpg">
                <small id="helpId" class="form-text text-muted">Link image</small>
                @error('image')
                <div class="alert alert-danger">{{ $message }}</div>
